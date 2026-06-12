@@ -1,0 +1,22 @@
+=========================================================
+               NOTA RESMI SEWA ALAT GUNUNG               
+=========================================================
+ Kode Pemesan    : GIB-2026
+ Nama Pemesan    : gibran udoh
+---------------------------------------------------------
+ Detail Barang:
+  - Kode Barang  : BRG05
+  - Nama Barang  : Kompor Portable
+  - Merk/Tipe    : Kovea
+  - Spesifikasi  : 42
+  - Jumlah       : 12 unit
+  - Durasi Sewa  : 1000 hari
+---------------------------------------------------------
+ TOTAL HARGA     : Rp. 120000000
+ Metode Bayar    : Transfer (TF)
+ Jumlah Bayar    : Rp. 120000000
+ Kembalian       : Rp. 0
+=========================================================
+         Terima kasih telah mempercayai kami!            
+       Harap kembalikan barang tepat waktu & bersih      
+=========================================================

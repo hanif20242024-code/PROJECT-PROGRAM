@@ -1,0 +1,43 @@
+USER : 
+PUTRA
+	- input nama lengkap pemesan, nomor telfon, jaminan tanda pengenal
+	- otomatis create kode barang dan kode pemesan
+	- inputkan jumlah barang yang akan disewa (jenis barang)
+GIBRAN
+	- pilih merk barang yang disewa dan spesifikasinya, misal sepatu (merk) (ukuran) dan total jumlah barangnya
+	- inputkan durasi sewa inputkan tanggal pinjam & pengembalian
+	- konfirmasi lagi jumlah dan jenis barang yang disewa (muncul sebagai list) "apakah anda yakin?" jika yakin lanjut ke step selanjutnya,
+	  jika tidak akan kembali ke bagian pilih jenis barang
+HANIF
+	- lalu akan muncul harga yang harus dibayar
+	- tampilkan barang yang dipesan beserta spesifikasi lengkap dan durasi sewa, harga sewa
+	- harga total dan pilih metode pembayaran, (TF dan cash), jika cash akan muncul uang yang dibayar dan kembalian
+	- semua total harga dan barang yang dipesan akan muncul di nota dan di print (.txt)
+
+ADMIN :
+	- password khusus admin
+	- melihat stock barang
+	- menambah / mengurangi stock
+	- menambah / mengurangi jenis barang
+	- monitoring penyewa (jumlah barang, durasi, jenis barang, nama penyewa)
+	- mengubah data penyewa
+	- monitoring log sewa (sesudah dikembalikan)
+
+	(DIBUAT PILIHAN)
+	1.SEWA BARANG
+	2.MELIHAT KATALOG BARANG
+	3.ADMIN
+
+CLASS
+ class sewa{
+ private:
+
+
+ public:
+	string nama;
+	int notlp;
+	string jaminan;
+	int jjenis;
+	int durasi;
+	int jbarang;
+ }

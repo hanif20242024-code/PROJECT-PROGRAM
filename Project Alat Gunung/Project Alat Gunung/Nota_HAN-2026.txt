@@ -1,0 +1,22 @@
+=========================================================
+               NOTA RESMI SEWA ALAT GUNUNG               
+=========================================================
+ Kode Pemesan    : HAN-2026
+ Nama Pemesan    : hanif aprillian
+---------------------------------------------------------
+ Detail Barang:
+  - Kode Barang  : BRG02
+  - Nama Barang  : Tas Carrier 60L
+  - Merk/Tipe    : Eiger
+  - Spesifikasi  : 44
+  - Jumlah       : 6 unit
+  - Durasi Sewa  : 12 hari
+---------------------------------------------------------
+ TOTAL HARGA     : Rp. 2880000
+ Metode Bayar    : Transfer (TF)
+ Jumlah Bayar    : Rp. 2880000
+ Kembalian       : Rp. 0
+=========================================================
+         Terima kasih telah mempercayai kami!            
+       Harap kembalikan barang tepat waktu & bersih      
+=========================================================

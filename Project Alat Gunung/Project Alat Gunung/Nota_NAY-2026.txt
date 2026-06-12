@@ -1,0 +1,22 @@
+=========================================================
+               NOTA RESMI SEWA ALAT GUNUNG               
+=========================================================
+ Kode Pemesan    : NAY-2026
+ Nama Pemesan    : nayo tama
+---------------------------------------------------------
+ Detail Barang:
+  - Kode Barang  : BRG03
+  - Nama Barang  : Sepatu Gunung
+  - Merk/Tipe    : Arei
+  - Spesifikasi  : 30
+  - Jumlah       : 1 unit
+  - Durasi Sewa  : 12 hari
+---------------------------------------------------------
+ TOTAL HARGA     : Rp. 420000
+ Metode Bayar    : Cash
+ Jumlah Bayar    : Rp. 500000
+ Kembalian       : Rp. 80000
+=========================================================
+         Terima kasih telah mempercayai kami!            
+       Harap kembalikan barang tepat waktu & bersih      
+=========================================================
