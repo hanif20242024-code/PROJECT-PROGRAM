@@ -1,0 +1,19 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX6049
+Nama Penyewa : c01
+No Telfon    : 08882
+Jaminan      : ktp
+---------------------------------------
+Barang       : Carrier Arei
+Spesifikasi  : 60 Liter
+Jumlah       : 2 unit
+Durasi       : 2 hari
+Tgl Pinjam   : 15-06-2026 09:32
+Tgl Kembali  : 17-06-2026 09:32
+---------------------------------------
+Total Bayar  : Rp. 140000
+Metode Bayar : TF
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

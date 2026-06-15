@@ -1,0 +1,21 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX1557
+Nama Penyewa : GIBRAN PUTRA
+No Telfon    : 088223931960
+Jaminan      : OTAK
+---------------------------------------
+Barang       : Carrier Arei
+Spesifikasi  : 60 Liter
+Jumlah       : 1 unit
+Durasi       : 8000 hari
+Tgl Pinjam   : 15-06-2026 13:38
+Tgl Kembali  : 10-05-2048 13:38
+---------------------------------------
+Total Bayar  : Rp. 280000000
+Metode Bayar : Cash
+Uang Dibayar : Rp. 28000000000
+Kembalian    : Rp. 27720000000
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

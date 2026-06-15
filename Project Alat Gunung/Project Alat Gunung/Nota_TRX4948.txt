@@ -1,0 +1,19 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX4948
+Nama Penyewa : yona
+No Telfon    : 09090909
+Jaminan      : ktp
+---------------------------------------
+Barang       : Sleeping Bag SUMMIT SERIES
+Spesifikasi  : 800g
+Jumlah       : 2 unit
+Durasi       : 2 hari
+Tgl Pinjam   : 15-06-2026 13:43
+Tgl Kembali  : 17-06-2026 13:43
+---------------------------------------
+Total Bayar  : Rp. 40000
+Metode Bayar : TF
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

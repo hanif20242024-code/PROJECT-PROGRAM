@@ -1,0 +1,19 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX9243
+Nama Penyewa : nayotama
+No Telfon    : 088223931960
+Jaminan      : KTP
+---------------------------------------
+Barang       : Carrier Arei
+Spesifikasi  : 60 Liter
+Jumlah       : 2 unit
+Durasi       : 3 hari
+Tgl Pinjam   : 14-06-2026 22:37
+Tgl Kembali  : 17-06-2026 22:37
+---------------------------------------
+Total Bayar  : Rp. 210000
+Metode Bayar : TF
+=======================================
+      TERIMA KASIH TELAH MENYEWA       
