@@ -1,0 +1,25 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX6673
+Nama Penyewa : Hanif A
+No Telfon    : 08313242323
+Jaminan      : KTP
+---------------------------------------
+Daftar Barang:
+- Tenda Dome Consina
+  Spesifikasi  : Kapasitas 4 Org
+  Jumlah       : 2 unit
+  Durasi       : 12 hari
+- Carrier Arei
+  Spesifikasi  : 60 Liter
+  Jumlah       : 1 unit
+  Durasi       : 3 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:22
+Tgl Kembali  : 28-06-2026 12:22
+---------------------------------------
+Total Bayar  : Rp. 1305000
+Metode Bayar : tf
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

@@ -1,0 +1,21 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX7450
+Nama Penyewa : das
+No Telfon    : 099456
+Jaminan      : ktp
+---------------------------------------
+Barang       : Carrier Arei
+Spesifikasi  : 60 Liter
+Jumlah       : 1 unit
+Durasi       : 12 hari
+Tgl Pinjam   : 15-06-2026 17:26
+Tgl Kembali  : 27-06-2026 17:26
+---------------------------------------
+Total Bayar  : Rp. 420000
+Metode Bayar : Cash
+Uang Dibayar : Rp. 500000
+Kembalian    : Rp. 80000
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

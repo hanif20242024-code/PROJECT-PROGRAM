@@ -1,0 +1,25 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX6412
+Nama Penyewa : Hanif Aprillian
+No Telfon    : 08977772728
+Jaminan      : KTP
+---------------------------------------
+Daftar Barang:
+- Sepatu Gunung Eiger
+  Spesifikasi  : Ukuran 42
+  Jumlah       : 2 unit
+  Durasi       : 12 hari
+- Tenda Dome Consina
+  Spesifikasi  : Kapasitas 4 Org
+  Jumlah       : 3 unit
+  Durasi       : 11 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 11:23
+Tgl Kembali  : 28-06-2026 11:23
+---------------------------------------
+Total Bayar  : Rp. 2250000
+Metode Bayar : TF
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

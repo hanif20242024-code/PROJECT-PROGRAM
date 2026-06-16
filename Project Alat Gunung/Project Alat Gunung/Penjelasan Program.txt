@@ -1,0 +1,544 @@
+// Memasukkan file header privat yang berisi deklarasi class, struct, dan fungsi sistem rental
+#include "RentalGunung.h" 
+
+// Memasukkan library standar untuk operasi Input/Output (seperti cin dan cout)
+#include <iostream> 
+
+// Memasukkan library untuk manajemen waktu presisi tinggi (seperti menghitung tanggal sewa)
+#include <chrono> 
+
+// Memasukkan library untuk konversi tipe data waktu tradisional C (seperti tm, time_t, localtime)
+#include <ctime> 
+
+// Memasukkan library untuk memformat tampilan output (seperti fixed, setprecision untuk nominal rupiah)
+#include <iomanip> 
+
+// Memasukkan library untuk operasi file handling (membaca dan menulis file nota .txt)
+#include <fstream> 
+
+// Memasukkan library untuk menghasilkan angka acak modern (digunakan pada generator kode transaksi)
+#include <random> 
+
+// Memasukkan library utilitas standar C (seperti system("cls") untuk membersihkan layar)
+#include <cstdlib> 
+
+// Memasukkan library untuk pembacaan input keyboard langsung tanpa enter (seperti _getch() untuk password)
+#include <conio.h> 
+
+// Menggunakan namespace standar C++ agar tidak perlu menulis std:: sebelum cin, cout, string, dll.
+using namespace std; 
+
+// =========================================================================
+// FUNGSI HELPER UNTUK VALIDASI ANGKA & NOMOR TELEPON
+// =========================================================================
+
+// Fungsi untuk menjamin pengguna menginputkan angka bulat (integer) dengan benar
+int inputInt(string prompt) {
+    int angka; // Variabel lokal untuk menampung angka hasil input
+    while (true) { // Melakukan perulangan terus-menerus sampai inputnya valid
+        cout << prompt; // Menampilkan teks instruksi penginputan ke layar
+        if (cin >> angka) { // Jika proses input berhasil dan tipe datanya sesuai (integer)
+            return angka; // Mengembalikan nilai angka ke pemanggil fungsi dan keluar dari loop
+        }
+        else { // Jika input gagal (misal user memasukkan huruf atau simbol)
+            cout << "[ERROR] Input tidak valid! Harap masukkan angka bulat.\n"; // Menampilkan pesan error
+            cin.clear(); // Membersihkan status error (error flag) pada stream cin
+            cin.ignore(10000, '\n'); // Mengabaikan/membuang sisa karakter salah di buffer hingga menemu enter
+        }
+    }
+}
+
+// Fungsi untuk menjamin pengguna menginputkan angka pecahan/desimal (double) dengan benar
+double inputDouble(string prompt) {
+    double angka; // Variabel lokal untuk menampung nominal desimal hasil input
+    while (true) { // Melakukan perulangan terus-menerus sampai inputnya valid
+        cout << prompt; // Menampilkan teks instruksi penginputan ke layar
+        if (cin >> angka) { // Jika proses input berhasil dan tipe datanya sesuai (double)
+            return angka; // Mengembalikan nilai pecahan tersebut dan keluar dari loop
+        }
+        else { // Jika input gagal (bukan angka pecahan/bulat)
+            cout << "[ERROR] Input tidak valid! Harap masukkan angka nominal yang benar.\n"; // Pesan error
+            cin.clear(); // Mengatur ulang kembali status stream cin agar normal
+            cin.ignore(10000, '\n'); // Mengosongkan buffer masukan dari karakter sampah
+        }
+    }
+}
+
+// Fungsi untuk memvalidasi nomor telepon agar hanya berisi karakter angka murni (0-9)
+string inputNoTelp(string prompt) {
+    string input; // Variabel untuk menampung string nomor telepon
+    while (true) { // Melakukan perulangan validasi string
+        cout << prompt; // Menampilkan instruksi input ke layar
+        getline(cin, input); // Membaca satu baris penuh input teks termasuk spasi jika ada
+        if (input.empty()) { // Memeriksa jika pengguna langsung menekan enter tanpa mengetik apapun
+            cout << "[ERROR] Nomor telepon tidak boleh kosong!\n"; // Pesan peringatan kosong
+            continue; // Langsung lompat ke iterasi perulangan berikutnya (minta input lagi)
+        }
+        bool semuaAngka = true; // Flag penanda, diasumsikan awal bahwa semua karakter adalah angka
+        for (char c : input) { // Melakukan perulangan untuk memeriksa tiap karakter dalam string satu per satu
+            if (c < '0' || c > '9') { // Jika ditemukan karakter di luar rentang kode ASCII '0' sampai '9'
+                semuaAngka = false; // Mengubah flag menjadi false karena ada karakter ilegal (huruf/simbol)
+                break; // Menghentikan perulangan for secara paksa karena validasi sudah gagal
+            }
+        }
+        if (semuaAngka) { // Jika setelah diperiksa seluruhnya, flag tetap bernilai true
+            return input; // Mengembalikan string nomor telepon yang valid dan keluar dari fungsi
+        }
+        else { // Jika flag bernilai false (mengandung huruf, spasi, atau simbol)
+            cout << "[ERROR] Nomor telepon hanya boleh berisi angka murni (0-9), tanpa spasi/huruf/simbol!\n"; // Pesan error
+        }
+    }
+}
+// =========================================================================
+
+
+// === IMPLEMENTASI CLASS BARANG ===
+
+// Constructor default (tanpa parameter) dari class Barang
+Barang::Barang() {} 
+
+// Constructor dengan parameter lengkap untuk menginisialisasi objek Barang baru
+Barang::Barang(string kb, string nb, string m, string spek, double hrg, int stk) {
+    kodeBarang = kb; // Mengisi properti kodeBarang dengan argumen kb
+    namaBarang = nb; // Mengisi properti namaBarang dengan argumen nb
+    merk = m; // Mengisi properti merk dengan argumen m
+    spesifikasi = spek; // Mengisi properti spesifikasi dengan argumen spek
+    hargaPerHari = hrg; // Mengisi properti hargaPerHari dengan argumen hrg
+    stok = stk; // Mengisi properti stok awal dengan argumen stk
+}
+
+// Fungsi untuk memperbarui jumlah stok barang (bisa bertambah saat restok/kembali, berkurang saat disewa)
+void Barang::updateStok(int jumlah) { 
+    stok += jumlah; // Menambahkan nilai stok lama dengan nilai parameter jumlah (bisa bernilai negatif)
+}
+
+// Fungsi untuk mengubah detail informasi master barang
+void Barang::ubahDetail(string nama, string m, double harga) { 
+    namaBarang = nama; // Mengganti nama barang lama dengan yang baru
+    merk = m; // Mengganti merk lama dengan yang baru
+    hargaPerHari = harga; // Mengganti harga sewa lama dengan yang baru
+}
+
+
+// === IMPLEMENTASI CLASS TRANSAKSI ===
+
+// Fungsi untuk menghitung dan mencatat tanggal pinjam serta estimasi maksimal tanggal pengembalian secara otomatis
+void Transaksi::hitungWaktuOtomatis() {
+    auto sekarang = chrono::system_clock::now(); // Mengambil titik waktu (timestamp) saat ini dari sistem operasi
+    time_t waktu_c = chrono::system_clock::to_time_t(sekarang); // Mengonversi titik waktu chrono menjadi tipe time_t standar C
+    char buf1[50]; // Membuat array karakter (buffer) untuk menyimpan string tanggal terformat
+    strftime(buf1, sizeof(buf1), "%d-%m-%Y %H:%M", localtime(&waktu_c)); // Memformat objek waktu menjadi teks (Tgl-Bln-Thn Jam:Menit)
+    this->tanggalPinjam = string(buf1); // Menyimpan hasil format teks ke dalam properti objek tanggalPinjam
+
+    int maxDurasi = 0; // Variabel temporary untuk mencari durasi sewa terlama dari keranjang belanja
+    for (int d : listDurasiHari) { // Melakukan looping ke seluruh daftar durasi item yang disewa
+        if (d > maxDurasi) maxDurasi = d; // Jika durasi item ini lebih lama, jadikan ia sebagai acuan batas maksimal kembali
+    }
+
+    auto kembali = sekarang + chrono::hours(24 * maxDurasi); // Menghitung titik waktu kembali (Waktu sekarang + (24 jam * hari terlama))
+    time_t kembali_c = chrono::system_clock::to_time_t(kembali); // Mengonversi titik waktu kembali menjadi format data time_t C
+    char buf2[50]; // Menyiapkan buffer karakter kedua untuk tanggal pengembalian
+    strftime(buf2, sizeof(buf2), "%d-%m-%Y %H:%M", localtime(&kembali_c)); // Memformat waktu kembali menjadi string siap cetak
+    this->tanggalKembali = string(buf2); // Menyimpan teks tersebut ke properti objek tanggalKembali
+}
+
+// Fungsi untuk menghitung akumulasi total biaya sewa dari seluruh barang yang ada di keranjang transaksi
+void Transaksi::hitungTotalBiaya() {
+    totalHarga = 0; // Mengeset nilai awal total harga menjadi 0 sebelum akumulasi dimulai
+    for (size_t i = 0; i < listBarang.size(); i++) { // Melakukan perulangan sebanyak jumlah jenis barang yang disewa
+        // Mengalikan (harga sewa item * jumlah unit yang disewa * durasi hari sewa item tersebut) lalu ditambahkan ke totalHarga
+        totalHarga += listBarang[i].hargaPerHari * listJumlahSewa[i] * listDurasiHari[i]; 
+    }
+}
+
+// Fungsi untuk menampilkan ringkasan data transaksi penyewaan ke layar console pengguna
+void Transaksi::tampilkanRincian() {
+    cout << "\n=======================================";
+    cout << "\n         RINCIAN PESANAN ANDA        ";
+    cout << "\n=======================================\n";
+    cout << "Kode Pemesan : " << kodePemesan << "\n"; // Menampilkan kode transaksi unik
+    cout << "Nama Penyewa : " << namaPemesan << "\n"; // Menampilkan nama pelanggan
+    cout << "---------------------------------------\n";
+    cout << "Daftar Barang yang Disewa:\n";
+    for (size_t i = 0; i < listBarang.size(); i++) { // Melakukan loop untuk membeberkan setiap item di dalam list keranjang
+        cout << "- " << listBarang[i].namaBarang << " (" << listBarang[i].merk << ")\n"; // Nama dan merk barang
+        cout << "  Jumlah : " << listJumlahSewa[i] << " unit\n"; // Jumlah kuantitas per item
+        cout << "  Durasi : " << listDurasiHari[i] << " hari\n"; // Durasi sewa masing-masing item
+    }
+    cout << "---------------------------------------\n";
+    cout << "Tgl Pinjam   : " << tanggalPinjam << "\n"; // Tanggal penyerahan barang
+    cout << "Tgl Kembali  : " << tanggalKembali << " (Estimasi Maks)\n"; // Batas akhir pengembalian barang tanpa denda
+    cout << "---------------------------------------\n";
+    // Menampilkan total biaya yang harus dibayar dengan format angka tanpa desimal (.0)
+    cout << "TOTAL HARGA  : Rp. " << fixed << setprecision(0) << totalHarga << "\n"; 
+    cout << "=======================================\n";
+}
+
+// Fungsi untuk mengarsip dan mengekspor nota transaksi resmi ke dalam bentuk file dokumen eksternal (.txt)
+void Transaksi::cetakNotaTxt() {
+    ofstream file("Nota_" + kodePemesan + ".txt"); // Membuat dan membuka file baru dengan nama dinamis berbasis kode pemesan
+    if (file.is_open()) { // Memeriksa apakah file berhasil dibuat dan siap ditulis oleh program
+        file << "=======================================\n";
+        file << "         NOTA SEWA ALAT GUNUNG         \n";
+        file << "=======================================\n";
+        file << "Kode Pemesan : " << kodePemesan << "\n"; // Menulis kode pesanan ke file
+        file << "Nama Penyewa : " << namaPemesan << "\n"; // Menulis nama penyewa ke file
+        file << "No Telfon    : " << noTelp << "\n"; // Menulis nomor kontak ke file
+        file << "Jaminan      : " << jaminan << "\n"; // Menulis kartu/barang jaminan ke file
+        file << "---------------------------------------\n";
+        file << "Daftar Barang:\n";
+        for (size_t i = 0; i < listBarang.size(); i++) { // Iterasi mencetak detail seluruh isi keranjang belanja ke dalam file
+            file << "- " << listBarang[i].namaBarang << " " << listBarang[i].merk << "\n";
+            file << "  Spesifikasi  : " << listBarang[i].spesifikasi << "\n";
+            file << "  Jumlah       : " << listJumlahSewa[i] << " unit\n";
+            file << "  Durasi       : " << listDurasiHari[i] << " hari\n";
+        }
+        file << "---------------------------------------\n";
+        file << "Tgl Pinjam   : " << tanggalPinjam << "\n"; // Menulis info tanggal penyerahan
+        file << "Tgl Kembali  : " << tanggalKembali << "\n"; // Menulis batas maksimal pengembalian
+        file << "---------------------------------------\n";
+        file << "Total Bayar  : Rp. " << fixed << setprecision(0) << totalHarga << "\n"; // Menulis total tagihan akhir
+        file << "Metode Bayar : " << metodeBayar << "\n"; // Menulis sistem pembayaran yang dipilih
+        if (metodeBayar == "Cash" || metodeBayar == "CASH" || metodeBayar == "cash") { // Jika opsi tunai terpilih
+            file << "Uang Dibayar : Rp. " << uangBayar << "\n"; // Tulis nominal uang fisik yang diberikan admin
+            file << "Kembalian    : Rp. " << kembalian << "\n"; // Tulis nominal kembalian yang dikembalikan ke penyewa
+        }
+        file << "=======================================\n";
+        file << "      TERIMA KASIH TELAH MENYEWA       \n";
+        file.close(); // Menutup stream file untuk memastikan data tersimpan aman di harddisk dan mencegah kebocoran memori
+        cout << "[INFO] Nota berhasil dicetak (Nota_" << kodePemesan << ".txt)\n"; // Notifikasi sukses di console layar
+    }
+}
+
+
+// === IMPLEMENTASI CLASS ADMIN ===
+
+// Fungsi untuk menyaring akses masuk menu admin menggunakan mekanisme input password bertopeng (hidden password)
+bool Admin::login() {
+    int sisaPercobaan = 3; // Memberikan kesempatan salah memasukkan password sebanyak maksimal 3 kali
+    while (sisaPercobaan > 0) { // Perulangan berjalan selama sisa kesempatan masih tersedia
+        string inputPass = ""; // Variabel string kosong untuk merekam pengetikan password admin
+        system("cls"); // Membersihkan layar jendela console
+        cout << "=======================================\n";
+        cout << "              LOGIN ADMIN              \n";
+        cout << "=======================================\n";
+        cout << "Masukkan Password Admin (Ketik 0 untuk Batal): ";
+
+        char ch; // Variabel karakter untuk mengecek ketukan keyboard satu per satu
+        while (true) { // Loop internal menangkap karakter ketukan keyboard secara real-time
+            ch = _getch(); // Membaca satu karakter masukan dari keyboard tanpa perlu menekan tombol Enter
+            if (ch == '\r' || ch == '\n') break; // Jika karakter yang ditekan berupa tombol 'Enter', hentikan loop input password
+            else if (ch == '\b') { // Jika karakter yang ditekan adalah tombol 'Backspace' (Hapus)
+                if (!inputPass.empty()) { // Dan jika string password saat ini tidak kosong
+                    inputPass.pop_back(); // Hapus satu karakter terakhir di dalam string inputPass
+                    cout << "\b \b"; // Mundurkan kursor console, cetak spasi kosong (menghapus '*'), lalu mundurkan kursor lagi
+                }
+            }
+            else if (ch >= 32 && ch <= 126) { // Jika karakter yang ditekan adalah karakter normal (huruf, angka, simbol)
+                inputPass.push_back(ch); // Masukkan karakter tersebut ke dalam bagian akhir string inputPass
+                cout << '*'; // Tampilkan karakter samaran '*' di layar console sebagai perlindungan privasi
+            }
+        }
+
+        if (inputPass == "0") { // Jika admin mengetik angka '0' lalu enter untuk membatalkan proses masuk
+            cout << "\n\n[INFO] Login dibatalkan.\n"; // Tampilkan info pembatalan
+            system("pause"); // Tahan tampilan layar sejenak
+            return false; // Mengembalikan nilai false (mengindikasikan login dibatalkan/gagal)
+        }
+        if (inputPass == passwordMaster) return true; // Jika password yang diinput sesuai dengan passwordMaster, kembalikan nilai true
+
+        sisaPercobaan--; // Mengurangi sisa kesempatan karena password yang dimasukkan salah
+        cout << "\n\n[ERROR] Password Salah!"; // Notifikasi error ke admin
+        if (sisaPercobaan > 0) { // Jika sisa kesempatan masih ada
+            cout << " Sisa percobaan Anda: " << sisaPercobaan << "\n"; // Informasikan sisa kesempatan tersebut
+            system("pause"); // Jeda layar agar admin sempat membaca peringatan
+        }
+    }
+    cout << "\n[AKSES DITOLAK] Anda salah memasukkan password sebanyak 3 kali.\n"; // Pesan penolakan mutlak jika 3x gagal
+    system("pause"); // Tahan tampilan layar
+    return false; // Login gagal secara penuh
+}
+
+// Fungsi untuk melihat daftar inventaris seluruh produk beserta status ketersediaan stoknya saat ini
+void Admin::lihatStok(const vector<Barang>& daftarBarang) {
+    cout << "\n=== STOCK BARANG ===\n";
+    for (const auto& b : daftarBarang) { // Looping konstan membaca isi kontainer vector databaseBarang tanpa memodifikasinya
+        // Mencetak baris detail: Kode | Nama Merk (Spesifikasi) - Jumlah Stok - Tarif Sewa per Hari
+        cout << b.kodeBarang << " | " << b.namaBarang << " " << b.merk << " (" << b.spesifikasi << ") - Stok: " << b.stok << " - Rp." << b.hargaPerHari << "/hari\n";
+    }
+}
+
+// Fungsi untuk mengubah jumlah stok master barang yang sudah ada (bisa memasok ulang ataupun menyusutkan)
+void Admin::restokBarang(vector<Barang>& daftarBarang) {
+    string kode; // Variabel pencari kode barang target
+    int jml; // Variabel jumlah stok baru yang ingin dioperasikan
+    lihatStok(daftarBarang); // Memanggil menu lihat stok internal agar admin tidak lupa kode barangnya
+    cout << "Masukkan Kode Barang yang ditambah/dikurangi stoknya: "; cin >> kode; // Input kode barang target
+    jml = inputInt("Masukkan jumlah (gunakan minus untuk mengurangi): "); // Input jumlah stok menggunakan pengaman fungsi inputInt
+
+    for (auto& b : daftarBarang) { // Menelusuri seluruh elemen vector barang dari awal sampai akhir
+        if (b.kodeBarang == kode) { // Jika ditemukan barang dengan kode yang cocok dengan input admin
+            b.updateStok(jml); // Panggil fungsi updateStok milik objek barang tersebut untuk mengkalkulasi stok baru
+            cout << "[SUKSES] Stok berhasil diupdate. Stok sekarang: " << b.stok << "\n"; return; // Tampilkan sukses dan keluar fungsi
+        }
+    }
+    cout << "[GAGAL] Kode barang tidak ditemukan.\n"; // Pesan kegagalan apabila loop selesai tapi kode tidak ditemukan
+}
+
+// Fungsi untuk mendaftarkan dan memasukkan kategori/jenis perlengkapan gunung baru ke dalam daftar katalog rental
+void Admin::tambahJenisBarang(vector<Barang>& daftarBarang) {
+    string kb, nb, m, spek; // Menyiapkan variabel-variabel penampung teks atribut barang baru
+    double hrg; // Variabel penampung nominal tarif sewa barang baru
+    int stk; // Variabel penampung jumlah unit fisik barang baru
+    cout << "Kode Barang Baru: "; cin >> kb; // Input kode barang baru unik
+    cout << "Nama Barang: "; cin.ignore(); getline(cin, nb); // Mengabaikan sisa newline lama, lalu ambil nama baris baru lengkap
+    cout << "Merk: "; getline(cin, m); // Mengambil teks merk inputan admin
+    cout << "Spesifikasi: "; getline(cin, spek); // Mengambil teks spesifikasi/deskripsi barang baru
+    
+    hrg = inputDouble("Harga / Hari: "); // Input nominal sewa harian terproteksi fungsi inputDouble
+    stk = inputInt("Stok Awal: "); // Input kuantitas unit awal terproteksi fungsi inputInt
+    
+    daftarBarang.push_back(Barang(kb, nb, m, spek, hrg, stk)); // Instansiasi objek Barang baru lalu dorong masuk ke akhir vector list barang
+    cout << "[SUKSES] Jenis barang baru berhasil ditambahkan.\n"; // Tampilkan info kesuksesan operasi pendaftaran barang
+}
+
+// Fungsi sentral admin untuk mengawasi penyewa aktif dan melakukan prosedur klaim pengembalian barang sewa
+void Admin::monitoringPenyewa(vector<Transaksi>& daftarAktif, vector<Transaksi>& daftarSelesai, vector<Barang>& daftarBarang) {
+    if (daftarAktif.empty()) { cout << "Tidak ada penyewa aktif.\n"; return; } // Proteksi jika tidak ada satupun transaksi sewa berjalan
+    cout << "\n=========================================\n";
+    cout << "         DAFTAR PENYEWA AKTIF (BELUM KEMBALI) \n";
+    cout << "=========================================\n";
+    for (size_t i = 0; i < daftarAktif.size(); i++) { // Mengulang daftar list sepanjang transaksi aktif yang tercatat
+        cout << i + 1 << ". Kode Sewa   : " << daftarAktif[i].kodePemesan << "\n"; // Nomor indeks dan kode transaksi sewa
+        cout << "   Nama Penyewa: " << daftarAktif[i].namaPemesan << "\n"; // Nama penyewa aktif
+        cout << "   No Telfon   : " << daftarAktif[i].noTelp << "\n"; // Nomor kontak aktif pelanggan
+        cout << "   Jaminan     : " << daftarAktif[i].jaminan << "\n"; // Kartu identitas/barang jaminan yang disimpan toko
+        cout << "   Tgl Pinjam  : " << daftarAktif[i].tanggalPinjam << "\n"; // Record waktu mulai penyewaan
+        cout << "   Tgl Kembali : " << daftarAktif[i].tanggalKembali << "\n"; // Batas waktu maksimal peminjaman alat gunung
+        cout << "   Total Biaya : Rp. " << fixed << setprecision(0) << daftarAktif[i].totalHarga << "\n"; // Total biaya sewa keseluruhan
+        cout << "   Barang disewa:\n";
+        for (size_t j = 0; j < daftarAktif[i].listBarang.size(); j++) { // Sub-loop untuk membeberkan isi detail item per transaksi
+            cout << "   -> " << daftarAktif[i].listBarang[j].namaBarang 
+                 << " (" << daftarAktif[i].listJumlahSewa[j] << " unit) | " << daftarAktif[i].listDurasiHari[j] << " Hari\n";
+        }
+        cout << "-----------------------------------------\n";
+    }
+    
+    int pil = inputInt("\nMenu Monitoring:\n1. Tandai Barang Kembali\n2. Kembali\nPilih: "); // Opsi lanjutan kontrol admin
+    if (pil == 1) { // Jika admin memilih mengeksekusi pengembalian barang pelanggan
+        int idx = inputInt("Pilih nomor urut penyewa yang mengembalikan barang: "); // Input nomor indeks transaksi di atas
+        if (idx > 0 && idx <= (int)daftarAktif.size()) { // Validasi batas aman agar input tidak melampaui rentang index vector
+            size_t targetIdx = static_cast<size_t>(idx) - 1; // Konversi input user menjadi index basis-0 vector asli
+            
+            // Mengembalikan jumlah kuantitas unit fisik barang yang disewa kembali ke stok gudang master barang
+            for (size_t j = 0; j < daftarAktif[targetIdx].listBarang.size(); j++) { // Lacak isi keranjang belanja transaksi target
+                for (auto& b : daftarBarang) { // Lacak kecocokan kode item dengan database utama barang toko
+                    if (b.kodeBarang == daftarAktif[targetIdx].listBarang[j].kodeBarang) { // Jika kode item sinkron
+                        b.updateStok(daftarAktif[targetIdx].listJumlahSewa[j]); // Tambahkan stok gudang sebanyak unit yang dipinjam
+                    }
+                }
+            }
+            daftarSelesai.push_back(daftarAktif[targetIdx]); // Pindahkan salinan objek transaksi dari daftar aktif ke daftar riwayat selesai
+            daftarAktif.erase(daftarAktif.begin() + targetIdx); // Hapus elemen transaksi aktif tersebut dari memori vector aktif
+            cout << "[SUKSES] Semua barang dikembalikan. Stok bertambah dan masuk ke Log Sewa.\n"; // Informasi berhasil
+        } else {
+            cout << "[ERROR] Nomor urut tidak valid!\n"; // Proteksi input indeks ngawur/out of bounds
+        }
+    }
+}
+
+// Fungsi arsip historis untuk meninjau rekaman database transaksi sewa alat gunung yang telah tuntas di masa lalu
+void Admin::monitoringLogSewa(const vector<Transaksi>& daftarSelesai) {
+    if (daftarSelesai.empty()) { cout << "Belum ada riwayat penyewaan selesai.\n"; return; } // Proteksi jika belum ada record riwayat
+    cout << "\n=========================================\n";
+    cout << "         LOG PENYEWAAN SELESAI           \n";
+    cout << "=========================================\n";
+    for (const auto& log : daftarSelesai) { // Loop konstan melintasi data riwayat masa lalu (log) tanpa mengubah datanya
+        cout << "Kode: " << log.kodePemesan << " | Nama: " << log.namaPemesan << "\n"; // Cetak kode & nama penyewa lawas
+        cout << "No Telp: " << log.noTelp << " | Jaminan: " << log.jaminan << "\n"; // Cetak kontak & jaminan lawas
+        cout << "Tgl Pinjam: " << log.tanggalPinjam << " | Tgl Kembali: " << log.tanggalKembali << " | Status: Selesai\n"; // Timeline lengkap
+        for (size_t j = 0; j < log.listBarang.size(); j++) { // Sub-loop menayangkan item apa saja yang pernah mereka gunakan dahulu
+            cout << "  - " << log.listBarang[j].namaBarang << " (" << log.listJumlahSewa[j] << " unit)\n";
+        }
+        cout << "-----------------------------------------\n";
+    }
+}
+
+
+// === IMPLEMENTASI CLASS SISTEM SEWA ===
+
+// Fungsi generator otomatis untuk menciptakan ID kode unik (seperti TRX4823) menggunakan algoritma pseudo-random modern
+string SistemSewa::generateKode(string prefix) {
+    random_device rd; // Memperoleh seed angka acak dari hardware perangkat keras komputer
+    mt19937 gen(rd()); // Menginisialisasi mesin generator bilangan acak berbasis algoritma Mersenne Twister 19937 dengan seed hardware
+    uniform_int_distribution<> dis(1000, 9999); // Membatasi sebaran output angka acak agar berada di rentang 4 digit (1000 s/d 9999)
+    return prefix + to_string(dis(gen)); // Menggabungkan teks awalan (prefix) dengan angka acak yang diubah menjadi teks string
+}
+
+// Fungsi seeding awal untuk memasukkan produk-produk default toko sewaktu aplikasi pertama kali dinyalakan
+void SistemSewa::inisialisasiDataAwal() {
+    databaseBarang.push_back(Barang("S01", "Sepatu Gunung", "Eiger", "Ukuran 42", 25000, 10)); // Memasukkan Sepatu Gunung ke basis data
+    databaseBarang.push_back(Barang("T01", "Tenda Dome", "Consina", "Kapasitas 4 Org", 50000, 5)); // Memasukkan data master Tenda Dome
+    databaseBarang.push_back(Barang("C01", "Carrier", "Arei", "60 Liter", 35000, 8)); // Memasukkan Tas Carrier ke basis data utama
+}
+
+// Fungsi publik untuk memamerkan etalase brosur katalog alat gunung yang siap dirental beserta spesifikasi & harga
+void SistemSewa::lihatKatalog() {
+    cout << "\n=======================================\n";
+    cout << "            KATALOG ALAT GUNUNG           \n";
+    cout << "=======================================\n";
+    for (const auto& b : databaseBarang) { // Looping konstan mengitari basis data utama barang toko rental
+        // Menampilkan blok informasi terstruktur: Kode, Nama+Merk, Spesifikasi, Harga Sewa per Hari, dan Unit Tersisa
+        cout << "Kode  : " << b.kodeBarang << "\nNama  : " << b.namaBarang << " " << b.merk << "\nSpek  : " << b.spesifikasi 
+             << "\nHarga : Rp. " << b.hargaPerHari << " / hari\nStok  : " << b.stok << " unit\n---------------------------------------\n";
+    }
+}
+
+// Fitur utama transaksi pemesanan bagi pelanggan toko untuk menyewa bermacam-macam alat gunung sekaligus (Multi-Item)
+void SistemSewa::fiturSewaBarang() {
+    Transaksi trxBaru; // Membuat satu objek Transaksi lokal kosong untuk merekam jalannya pemesanan baru ini
+    cout << "\n=== INPUT DATA PENYEWA ===\n";
+    trxBaru.kodePemesan = generateKode("TRX"); // Memproduksi ID transaksi sewa otomatis lewat fungsi generator kode unik
+    cout << "Kode Pemesan (Otomatis): " << trxBaru.kodePemesan << "\n";
+    cin.ignore(); // Menyingkirkan karakter newline sisa di input stream agar tidak melompati baris pembacaan teks selanjutnya
+    cout << "Nama Lengkap: "; getline(cin, trxBaru.namaPemesan); // Mengambil baris data teks nama penyewa baru secara utuh
+    
+    trxBaru.noTelp = inputNoTelp("No Telp     : "); // Mengambil string nomor telepon tervalidasi bebas huruf/simbol
+    cout << "Jaminan     : "; getline(cin, trxBaru.jaminan); // Meminta info jaminan transaksi (misal: KTP, SIM, dll.)
+
+    bool lanjutSewa = true; // Flag status pengontrol kelanjutan belanja item tambahan dalam satu transaksi
+    while (lanjutSewa) { // Loop belanja berjalan selama user masih ingin memasukkan barang ke keranjang
+        system("cls"); // Bersihkan layar console agar katalog tampil di posisi atas
+        lihatKatalog(); // Memanggil daftar katalog toko sebagai referensi belanja pelanggan
+        string kodePilih; cout << "Masukkan Kode Barang yang disewa: "; cin >> kodePilih; // User memasukkan string kode item
+        bool ketemu = false; // Penanda lokal untuk status pencarian barang di database
+        Barang* barangTerpilih = nullptr; // Pointer penunjuk alamat memori barang asli di dalam vector databaseBarang
+        
+        for (auto& b : databaseBarang) { // Mencari kecocokan kode input pelanggan di barisan vector barang utama
+            if (b.kodeBarang == kodePilih) { // Apabila kode barang di database klop dengan kode pilihan user
+                barangTerpilih = &b; // Simpan referensi memori alamat barang tersebut ke dalam pointer barangTerpilih
+                ketemu = true; // Set flag ketemu menjadi true karena barang ada
+                break; // Keluar dari loop pencarian karena target sudah ditemukan
+            }
+        }
+        if (!ketemu) { // Jika loop tuntas namun flag ketemu tetap berstatus salah
+            cout << "[ERROR] Kode barang tidak ditemukan. Ulangi.\n"; // Tampilkan alert kesalahan kode barang
+            system("pause"); // Tahan jendela console sementara agar user sadar
+            continue; // Paksa kembali melompat ke awal siklus perulangan input barang sewa
+        }
+
+        int jmlSewa = inputInt("Jumlah yang disewa: "); // Input kuantitas unit item terproteksi fungsi inputInt
+        if (jmlSewa > barangTerpilih->stok) { // Jika kuantitas unit yang diminta melebihi stok fisik yang tersisa di toko
+            cout << "[ERROR] Stok tidak mencukupi!\n"; // Tampilkan alert stock out
+            system("pause"); // Tahan layar sejenak
+            continue; // Batalkan item ini dan balik lagi ke awal loop sewa barang
+        }
+        
+        int durasi = inputInt("Durasi Sewa (Hari): "); // Input lama masa sewa unit terproteksi fungsi inputInt
+
+        cout << "\nKonfirmasi: Anda memilih " << barangTerpilih->namaBarang << " sebanyak " << jmlSewa << " buah.\nApakah Anda yakin? (Y/N): ";
+        char cYakin; cin >> cYakin; // Input karakter persetujuan deal pemesanan item
+        if (cYakin == 'Y' || cYakin == 'y') { // Apabila pembeli menyetujui pemesanan item terkait
+            barangTerpilih->updateStok(-jmlSewa); // Potong stok gudang riil milik barang tersebut (menggunakan tanda minus)
+            
+            trxBaru.listBarang.push_back(*barangTerpilih); // Gandakan data objek barang tersebut masuk ke array keranjang belanja transaksi
+            trxBaru.listJumlahSewa.push_back(jmlSewa); // Masukkan jumlah kuantitas unit sewa ke array paralel kuantitas transaksi
+            trxBaru.listDurasiHari.push_back(durasi); // Masukkan kuantitas durasi hari sewa ke array paralel waktu transaksi
+            
+            cout << "[SUKSES] Barang berhasil dimasukkan keranjang belanja.\n"; // Konfirmasi berhasil masuk cart
+        } else { 
+            cout << "Batal menambahkan barang ini...\n"; // Notifikasi pembatalan item tunggal
+        }
+
+        cout << "\nApakah Anda ingin menyewa barang lain? (Y/N): ";
+        char cLanjut; cin >> cLanjut; // Konfirmasi kelanjutan aktivitas belanja item jenis lainnya
+        if (cLanjut == 'N' || cLanjut == 'n') { // Jika pelanggan menjawab tidak ingin menyewa item jenis lain lagi
+            lanjutSewa = false; // Ubah variabel kontrol loop menjadi false untuk menyudahi proses pengumpulan barang
+        }
+    }
+
+    if (trxBaru.listBarang.empty()) { // Jika setelah keluar loop ternyata keranjang belanja kosong melompong (tidak ada item masuk)
+        cout << "[INFO] Tidak ada barang yang disewa. Transaksi dibatalkan.\n"; // Batalkan transaksi seutuhnya
+        return; // Keluar dari fungsi pemesanan dan kembali ke menu utama
+    }
+
+    system("cls"); // Bersihkan layar console untuk menyiapkan proses pembayaran (checkout)
+    trxBaru.hitungWaktuOtomatis(); // Kalkulasi jam sewa & batas tenggat hari pengembalian otomatis berdasarkan waktu server
+    trxBaru.hitungTotalBiaya(); // Akumulasikan seluruh biaya perkalian tarif item * kuantitas * hari
+    trxBaru.tampilkanRincian(); // Pajang rangkuman lembar rincian pesanan final ke layar sebelum dibayar
+
+    cout << "Metode Pembayaran (Cash/TF): "; cin >> trxBaru.metodeBayar; // Minta input teks jenis cara bayar pelanggan
+    if (trxBaru.metodeBayar == "Cash" || trxBaru.metodeBayar == "CASH" || trxBaru.metodeBayar == "cash") { // Alur jika tunai
+        do {
+            trxBaru.uangBayar = inputDouble("Masukkan nominal uang bayar: Rp. "); // Input nominal uang fisik dari pembeli
+            if (trxBaru.uangBayar < trxBaru.totalHarga) cout << "[ERROR] Uang kurang!\n"; // Proteksi jika uang yang diserahkan kurang dari total biaya tagihan
+        } while (trxBaru.uangBayar < trxBaru.totalHarga); // Loop mengunci di sini selama uang yang dibayarkan pelanggan kurang
+        trxBaru.kembalian = trxBaru.uangBayar - trxBaru.totalHarga; // Hitung uang kembalian (Uang dibayar - Total harga tagihan)
+        cout << "Kembalian Anda: Rp. " << trxBaru.kembalian << "\n"; // Cetak jumlah kembalian di layar console
+    } else { // Alur jika non-tunai (Transfer Bank)
+        cout << "Silahkan Transfer ke Rekening BCA: 1234567890 a.n Rental Gunung\n"; // Berikan instruksi rekening tujuan toko
+        trxBaru.uangBayar = trxBaru.totalHarga; trxBaru.kembalian = 0; // Set uang bayar pas dengan harga, kembalian dinolkan
+    }
+    trxBaru.cetakNotaTxt(); // Panggil fungsi cetak untuk memproduksi arsip salinan file Nota_TRXxxx.txt di penyimpanan lokal
+    transaksiAktif.push_back(trxBaru); // Daftarkan objek transaksi berstatus lunas ini ke dalam barisan antrean penyewa aktif toko
+}
+
+// Fungsi internal pengendali dashboard admin toko rental untuk mengakses menu-menu rahasia internal manajemen data
+void SistemSewa::menuAdmin() {
+    if (!adminSistem.login()) { // Jalankan sistem login admin terlebih dahulu; jika return value bernilai false (gagal/batal)
+        return; // Hentikan fungsi panel admin seketika dan tolak akses masuk menu
+    }
+    int pil; // Variabel penampung nomor pilihan sub-menu admin
+    do {
+        system("cls"); // Bersihkan console layar menu
+        // Mencetak daftar pilihan tugas yang bisa dikerjakan oleh admin rental alat gunung
+        pil = inputInt("\n=== PANEL ADMIN ===\n1. Lihat Stok Barang\n2. Tambah/Kurangi Stok\n3. Tambah Jenis Barang Baru\n4. Monitoring Penyewa Aktif (Kembalikan Barang)\n5. Monitoring Log Sewa (Selesai)\n6. Keluar Panel Admin\nPilih: ");
+        
+        switch (pil) { // Memetakan pilihan input nomor menu admin ke fungsionalitasnya masing-masing
+            case 1: 
+                system("cls"); adminSistem.lihatStok(databaseBarang); // Membuka modul monitor kuantitas stok barang
+                system("pause"); break; // Jeda tampilan layar console, lalu break switch case
+            case 2: 
+                system("cls"); adminSistem.restokBarang(databaseBarang); // Membuka modul modifikasi data jumlah unit stok terdaftar
+                system("pause"); break;
+            case 3: 
+                system("cls"); adminSistem.tambahJenisBarang(databaseBarang); // Membuka modul input klasifikasi pendaftaran barang baru toko
+                system("pause"); break;
+            case 4: 
+                system("cls"); adminSistem.monitoringPenyewa(transaksiAktif, logSelesai, databaseBarang); // Membuka panel sewa berjalan & retur barang
+                system("pause"); break;
+            case 5: 
+                system("cls"); adminSistem.monitoringLogSewa(logSelesai); // Membuka arsip rekaman sejarah transaksi lama yang sudah tutup buku
+                system("pause"); break;
+            case 6: 
+                cout << "Keluar dari menu admin...\n"; break; // Keluar dari switch case untuk merespons pilihan pulang admin
+            default: 
+                cout << "Pilihan tidak valid!\n"; system("pause"); // Mengatasi input angka menu di luar nomor 1 s/d 6
+        }
+    } while (pil != 6); // Ulangi menampilkan dashboard panel admin selama admin tidak memilih angka 6 (Keluar)
+}
+
+// Gerbang utama sistem (Entry Point Menu Utama) yang akan berinteraksi langsung pertama kali saat user menyalakan aplikasi
+void SistemSewa::menuUtama() {
+    int pilihan; // Variabel pencatat pilihan menu level terluar aplikasi
+    do {
+        system("cls"); // Membersihkan sisa log visual di layar cmd/console
+        // Menampilkan interface menu utama penyewaan toko peralatan gunung ke layar
+        pilihan = inputInt("\n=======================================\n        SISTEM RENTAL ALAT GUNUNG       \n=======================================\n1. Sewa Barang\n2. Melihat Katalog Barang\n3. Admin\n4. Keluar\nPilihan Anda: ");
+        
+        switch (pilihan) { // Melompat ke fungsi fitur sesuai angka tombol opsi yang ditekan user
+            case 1: 
+                system("cls"); fiturSewaBarang(); // Masuk ke proses alur pemesanan dan penyewaan barang
+                system("pause"); break; // Menjeda layar console, dilanjutkan memutus switch case
+            case 2: 
+                system("cls"); lihatKatalog(); // Masuk ke fungsi brosur katalog alat publik toko
+                system("pause"); break; 
+            case 3: 
+                menuAdmin(); break; // Masuk ke jembatan autentikasi login dan kendali panel admin sistem
+            case 4: 
+                cout << "Terima kasih telah menggunakan sistem ini!\n"; break; // Mengakhiri eksekusi program sistem sewa
+            default: 
+                cout << "Pilihan tidak valid, coba lagi.\n"; system("pause"); // Penanganan error jika menekan angka di luar rentang menu utama
+        }
+    } while (pilihan != 4); // Pertahankan program tetap hidup dan looping terus-menerus selama user tidak memilih angka 4 (Keluar)
+}

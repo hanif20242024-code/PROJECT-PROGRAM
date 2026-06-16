@@ -1,0 +1,23 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX7495
+Nama Penyewa : Hanif Aprillian
+No Telfon    : 0831093324
+Jaminan      : KTP
+---------------------------------------
+Daftar Barang:
+- Carrier Arei
+  Spesifikasi  : 60 Liter
+  Jumlah       : 2 unit
+  Durasi       : 3 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:15
+Tgl Kembali  : 19-06-2026 12:15
+---------------------------------------
+Total Bayar  : Rp. 210000
+Metode Bayar : cash
+Uang Dibayar : Rp. 250000
+Kembalian    : Rp. 40000
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

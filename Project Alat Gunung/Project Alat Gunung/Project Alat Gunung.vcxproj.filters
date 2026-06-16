@@ -18,10 +18,19 @@
     <Text Include="konsep.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="Penjelasan Program.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="konsep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RentalGunung.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RentalGunung.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

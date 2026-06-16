@@ -1,0 +1,23 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX7481
+Nama Penyewa : Hanif Aprillian
+No Telfon    : f
+Jaminan      : ktp
+---------------------------------------
+Daftar Barang:
+- Sepatu Gunung Eiger
+  Spesifikasi  : Ukuran 42
+  Jumlah       : 5 unit
+  Durasi       : 3 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:05
+Tgl Kembali  : 19-06-2026 12:05
+---------------------------------------
+Total Bayar  : Rp. 375000
+Metode Bayar : cash
+Uang Dibayar : Rp. 400000
+Kembalian    : Rp. 25000
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

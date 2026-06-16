@@ -1,0 +1,21 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX5050
+Nama Penyewa : Nayo
+No Telfon    : 0098765252525
+Jaminan      : KTP
+---------------------------------------
+Daftar Barang:
+- Tenda Dome Consina
+  Spesifikasi  : Kapasitas 4 Org
+  Jumlah       : 3 unit
+  Durasi       : 12 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:27
+Tgl Kembali  : 28-06-2026 12:27
+---------------------------------------
+Total Bayar  : Rp. 1800000
+Metode Bayar : tf
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

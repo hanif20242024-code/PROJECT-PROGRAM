@@ -1,0 +1,23 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX6847
+Nama Penyewa : Gibran
+No Telfon    : 098098798
+Jaminan      : Rumah
+---------------------------------------
+Daftar Barang:
+- Risol Jojo
+  Spesifikasi  : Mayo
+  Jumlah       : 2 unit
+  Durasi       : 1 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:30
+Tgl Kembali  : 17-06-2026 12:30
+---------------------------------------
+Total Bayar  : Rp. 4000
+Metode Bayar : cash
+Uang Dibayar : Rp. 4000
+Kembalian    : Rp. 0
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

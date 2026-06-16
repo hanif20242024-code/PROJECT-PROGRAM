@@ -1,0 +1,25 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX5329
+Nama Penyewa : Hanif
+No Telfon    : 087665442424
+Jaminan      : KTP
+---------------------------------------
+Daftar Barang:
+- Sepatu Gunung Eiger
+  Spesifikasi  : Ukuran 42
+  Jumlah       : 2 unit
+  Durasi       : 2 hari
+- Carrier Arei
+  Spesifikasi  : 60 Liter
+  Jumlah       : 7 unit
+  Durasi       : 2 hari
+---------------------------------------
+Tgl Pinjam   : 16-06-2026 12:26
+Tgl Kembali  : 18-06-2026 12:26
+---------------------------------------
+Total Bayar  : Rp. 590000
+Metode Bayar : tf
+=======================================
+      TERIMA KASIH TELAH MENYEWA       
