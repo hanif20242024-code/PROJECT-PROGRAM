@@ -1,0 +1,23 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX5970
+Nama Penyewa : ,lkmkml
+No Telfon    : 8909809
+Jaminan      : kml
+---------------------------------------
+Daftar Barang:
+- Carrier Arei
+  Spesifikasi  : 60 Liter
+  Jumlah       : 2 unit
+  Durasi       : 2 hari
+---------------------------------------
+Tgl Pinjam   : 18-06-2026 11:25
+Tgl Kembali  : 20-06-2026 11:25
+---------------------------------------
+Total Bayar  : Rp. 140000
+Metode Bayar : CASH
+Uang Dibayar : Rp. 500000
+Kembalian    : Rp. 360000
+=======================================
+      TERIMA KASIH TELAH MENYEWA       

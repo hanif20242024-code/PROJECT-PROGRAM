@@ -15,16 +15,24 @@ using namespace std;
 // =========================================================================
 
 int inputInt(string prompt) {
+
     int angka;
     while (true) {
         cout << prompt;
         if (cin >> angka) {
-            return angka;
+            if (angka <= 0) {
+                cout << "[ERROR] Input tidak boleh negatif atau 0! Harap masukkan angka bulat positif.\n";
+                continue;
+            }
+            else {
+                return angka;
+            }
         }
         else {
             cout << "[ERROR] Input tidak valid! Harap masukkan angka bulat.\n";
             cin.clear();
             cin.ignore(10000, '\n');
+			return -1; // Mengembalikan -1 untuk menandakan input tidak valid
         }
     }
 }
@@ -368,6 +376,11 @@ void SistemSewa::fiturSewaBarang() {
         }
 
         int jmlSewa = inputInt("Jumlah yang disewa: ");
+        if (jmlSewa <= 0) {
+            cout << "[ERROR] Jumlah sewa harus lebih dari 0!\n";
+            system("pause");
+            continue;
+		}
         if (jmlSewa > barangTerpilih->stok) {
             cout << "[ERROR] Stok tidak mencukupi!\n";
             system("pause");

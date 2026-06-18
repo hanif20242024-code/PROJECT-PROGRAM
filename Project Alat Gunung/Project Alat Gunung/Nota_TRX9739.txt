@@ -1,0 +1,21 @@
+=======================================
+         NOTA SEWA ALAT GUNUNG         
+=======================================
+Kode Pemesan : TRX9739
+Nama Penyewa : jhjhj
+No Telfon    : 98908908
+Jaminan      : jkjhkj
+---------------------------------------
+Daftar Barang:
+- Carrier Arei
+  Spesifikasi  : 60 Liter
+  Jumlah       : 0 unit
+  Durasi       : 0 hari
+---------------------------------------
+Tgl Pinjam   : 18-06-2026 11:09
+Tgl Kembali  : 18-06-2026 11:09
+---------------------------------------
+Total Bayar  : Rp. 0
+Metode Bayar : TF
+=======================================
+      TERIMA KASIH TELAH MENYEWA       
