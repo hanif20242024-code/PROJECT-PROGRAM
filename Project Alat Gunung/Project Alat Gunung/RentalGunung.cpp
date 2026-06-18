@@ -32,7 +32,6 @@ int inputInt(string prompt) {
             cout << "[ERROR] Input tidak valid! Harap masukkan angka bulat.\n";
             cin.clear();
             cin.ignore(10000, '\n');
-			return -1; // Mengembalikan -1 untuk menandakan input tidak valid
         }
     }
 }
@@ -571,8 +570,8 @@ void SistemSewa::menuUtama() {
     int pilihan;
     do {
         system("cls");
-        pilihan = inputInt("\n=======================================\n        SISTEM RENTAL ALAT GUNUNG       \n=======================================\n1. Sewa Barang\n2. Melihat Katalog Barang\n3. Admin\n4. Keluar\nPilihan Anda: ");
-
+       cout << "\n=======================================\n        SISTEM RENTAL ALAT GUNUNG       \n=======================================\n1. Sewa Barang\n2. Melihat Katalog Barang\n3. Admin\n4. Keluar\nPilihan Anda: ";
+       cin >> pilihan;
         switch (pilihan) {
         case 1:
             system("cls"); fiturSewaBarang();
@@ -585,6 +584,8 @@ void SistemSewa::menuUtama() {
         case 4:
             cout << "Terima kasih telah menggunakan sistem ini!\n"; break;
         default:
+            cin.clear();
+            cin.ignore();
             cout << "Pilihan tidak valid, coba lagi.\n"; system("pause");
         }
     } while (pilihan != 4);
