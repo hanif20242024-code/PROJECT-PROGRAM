@@ -23,7 +23,7 @@ public:
     Barang();
     Barang(string kb, string nb, string m, string spek, double hrg, int stk);
     void updateStok(int jumlah);
-    void ubahDetail(string nama, string m, double harga);
+    void ubahDetail(string nama, string m, double harga, string k, string s);
 };
 
 // ==========================================
@@ -52,6 +52,7 @@ public:
     void hitungTotalBiaya();
     void tampilkanRincian();
     void cetakNotaTxt();
+   
 };
 
 // ==========================================
@@ -68,6 +69,8 @@ public:
     void tambahJenisBarang(vector<Barang>& daftarBarang);
     void monitoringPenyewa(vector<Transaksi>& daftarAktif, vector<Transaksi>& daftarSelesai, vector<Barang>& daftarBarang);
     void monitoringLogSewa(const vector<Transaksi>& daftarSelesai);
+   
+   
 };
 
 // ==========================================
@@ -88,6 +91,7 @@ public:
     void fiturSewaBarang();
     void menuAdmin();
     void menuUtama();
+    void ubahdata();
 };
 
 #endif

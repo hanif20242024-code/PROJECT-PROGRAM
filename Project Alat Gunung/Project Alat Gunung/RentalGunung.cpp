@@ -77,7 +77,13 @@ Barang::Barang(string kb, string nb, string m, string spek, double hrg, int stk)
     kodeBarang = kb; namaBarang = nb; merk = m; spesifikasi = spek; hargaPerHari = hrg; stok = stk;
 }
 void Barang::updateStok(int jumlah) { stok += jumlah; }
-void Barang::ubahDetail(string nama, string m, double harga) { namaBarang = nama; merk = m; hargaPerHari = harga; }
+void Barang::ubahDetail(string nama, string m, double harga, string k, string s) { 
+    namaBarang = nama;
+    merk = m;
+    hargaPerHari = harga;
+    kodeBarang = k;
+    spesifikasi = s;
+}
 
 // === IMPLEMENTASI CLASS TRANSAKSI ===
 void Transaksi::hitungWaktuOtomatis() {
@@ -419,6 +425,97 @@ void SistemSewa::fiturSewaBarang() {
     trxBaru.cetakNotaTxt();
     transaksiAktif.push_back(trxBaru);
 }
+void SistemSewa::ubahdata() {
+    char eh;
+    bool lanjutSewa = true;
+    while (lanjutSewa) {
+        system("cls");
+        lihatKatalog();
+        cout << "[e] Edit [h] hapus [k] kembali: ";
+        cin >> eh;
+        
+        if (eh == 'e' || eh == 'E') {
+            string kodePilih; cout << "Masukkan Kode Barang yang ingin diubah: "; cin >> kodePilih;
+            bool ketemu = false;
+            Barang* barangTerpilih = nullptr;
+
+            for (auto& b : databaseBarang) {
+                if (b.kodeBarang == kodePilih) {
+                    barangTerpilih = &b;
+                    ketemu = true;
+                    break;
+                }
+            }
+            if (!ketemu) {
+                cout << "[ERROR] Kode barang tidak ditemukan. Ulangi.\n";
+                system("pause");
+                continue;
+            }
+            if (ketemu == true) {
+                string n ,m ,k ,s;
+                double h;
+                cin.ignore();
+                cout << "ubah nama barang\t:";
+                getline(cin, n);
+                cout << "ubah merk barang\t:";
+                getline(cin, m);
+                cout << "ubah harga barang\t:";
+                cin >> h;
+                while (h < 0 || cin.fail()) {
+                    cin.clear();
+                    cin.ignore();
+                    cout << "Tidak Valid!!\n";
+                    cout << "ubah harga barang\t:";
+                    cin >> h;
+                }
+                cin.ignore();
+                cout << "ubah kode barang\t:";
+                getline(cin, k);
+                cout << "ubah spesifikasi barang\t:";
+                getline(cin, s);
+
+               
+                (*barangTerpilih).ubahDetail(n, m, h, k, s);
+
+                cout << "[SUKSES] Data barang berhasil diubah!\n";
+
+            }
+
+        }
+        else if (eh == 'h' || eh == 'H') {
+
+            string kodePilih;
+            cout << "Masukkan Kode Barang yang ingin dihapus: ";
+            cin >> kodePilih;
+
+            bool ketemu = false;
+            size_t indexHapus = 0;
+
+            for (size_t i = 0; i < databaseBarang.size(); i++) {
+                if (databaseBarang[i].kodeBarang == kodePilih) {
+                    indexHapus = i;
+                    ketemu = true;
+                    break;
+                }
+            }
+
+            if (!ketemu) {
+                cout << "[ERROR] Kode barang tidak ditemukan.\n";
+                system("pause");
+                continue;
+            }
+
+            databaseBarang.erase(databaseBarang.begin() + indexHapus);
+
+            cout << "[SUKSES] Barang berhasil dihapus.\n";
+            system("pause");
+        }
+        else {
+            return;
+        }
+    }
+
+}   
 
 void SistemSewa::menuAdmin() {
     if (!adminSistem.login()) {
@@ -427,7 +524,7 @@ void SistemSewa::menuAdmin() {
     int pil;
     do {
         system("cls");
-        pil = inputInt("\n=== PANEL ADMIN ===\n1. Lihat Stok Barang\n2. Tambah/Kurangi Stok\n3. Tambah Jenis Barang Baru\n4. Monitoring Penyewa Aktif (Kembalikan Barang)\n5. Monitoring Log Sewa (Selesai)\n6. Keluar Panel Admin\nPilih: ");
+        pil = inputInt("\n=== PANEL ADMIN ===\n1. Lihat Stok Barang\n2. Tambah/Kurangi Stok\n3. Tambah Jenis Barang Baru\n4. Monitoring Penyewa Aktif (Kembalikan Barang)\n5. Monitoring Log Sewa (Selesai)\n6. Ubah Data\n7. Keluar Panel Admin\nPilih: ");
 
         switch (pil) {
         case 1:
@@ -445,12 +542,16 @@ void SistemSewa::menuAdmin() {
         case 5:
             system("cls"); adminSistem.monitoringLogSewa(logSelesai);
             system("pause"); break;
-        case 6:
+        case 7:
             cout << "Keluar dari menu admin...\n"; break;
+        case 6:
+            system("cls"); 
+            ubahdata();
+            system("pause"); break;
         default:
             cout << "Pilihan tidak valid!\n"; system("pause");
         }
-    } while (pil != 6);
+    } while (pil != 7);
 }
 
 void SistemSewa::menuUtama() {
